@@ -34,7 +34,8 @@ class SiteController extends Controller
                 && $model->save())
         {
             Yii::$app->session->setFlash('success', 'Данные успешно сохранены в базу.');
-            if($image->load(Yii::$app->request->post()) && $image->validate()) {
+            
+            if($image->load(Yii::$app->request->post())) {
                 $image->imageFiles = \yii\web\UploadedFile::getInstances($image, 'imageFiles');                 
                 foreach ($image->imageFiles as $file) {
                     $name = md5(microtime() . rand(0, 9999));
@@ -48,7 +49,6 @@ class SiteController extends Controller
                      Yii::$app->session->setFlash('success1', 'Данные успешно сохранены в таблицу Images.');
                     }
                 } 
-             
                 
             Yii::$app->mailer->getView()->params['name'] =  $model->name;
             Yii::$app->mailer->getView()->params['age'] =  $model->age;
@@ -101,21 +101,6 @@ class SiteController extends Controller
             'model' => $model,
             'image' => $image,
         ]);
-    }
-   
-    
-    public function  actionLoad()
-    {
-        $image = new Images();
-        
-        
-         if($image->load(Yii::$app->request->post())) {
-                $image->imageFiles = \yii\web\UploadedFile::getInstances($image, 'imageFiles');                 
-                foreach ($image->imageFiles as $file) {
-                    $name = md5(microtime() . rand(0, 9999));
-                    $file->saveAs('uploads/'. $name.'.'.$file->extension, false);
-                    }
-                } 
     }
       
 
